@@ -80,7 +80,8 @@ static int dwc3_gadget_plugout(struct dwc3_plug *dwc_plug)
 	spin_unlock_irqrestore(&dwc->lock, flags);
 	
 	dwc3_gadget_plug_disconnect(dwc);
-	gadget->ops->udc_stop(&dwc->gadget, dwc->gadget_driver);
+	if (dwc->gadget_driver != NULL)
+		gadget->ops->udc_stop(&dwc->gadget, dwc->gadget_driver);
 	return 0;
 }
 
@@ -93,7 +94,8 @@ static int dwc3_gadget_plugin(struct dwc3_plug *dwc_plug)
 
 	dwc3_gadget_plugin_init(dwc);
 
-	gadget->ops->udc_start(gadget, dwc_plug->dwc_gadget_driver);
+	if (dwc->gadget_driver != NULL)
+		gadget->ops->udc_start(gadget, dwc_plug->dwc_gadget_driver);
 
 	spin_lock_irqsave(&dwc->lock, flags);
 	dwc3_gadget_plug_pullup(gadget, 1);
