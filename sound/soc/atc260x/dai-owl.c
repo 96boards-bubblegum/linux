@@ -538,8 +538,8 @@ static int s900_dai_mode_set(struct s900_pcm_priv *pcm_priv,
 
 	case O_MODE_HDMI:
 		/* HDMI&SPDIF fifo reset */
+		set_dai_reg_base(I2S_SPDIF_NUM);
 		if (dai_mode_hdmi_count == 0) {
-			set_dai_reg_base(I2S_SPDIF_NUM);
 			snd_dai_writel(snd_dai_readl(SPDIF_HDMI_CTL) & ~0x3,
 				SPDIF_HDMI_CTL);
 			/* HDMI fifo enable,DRQ enable */

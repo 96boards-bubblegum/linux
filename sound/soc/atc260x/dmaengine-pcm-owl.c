@@ -279,6 +279,7 @@ int snd_dmaengine_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
 
 	switch (cmd) {
 	case SNDRV_PCM_TRIGGER_START:
+		//printk("%s %d\n", __FUNCTION__, __LINE__);
 		ret = dmaengine_pcm_prepare_and_submit(substream);
 		if (ret)
 		{
@@ -287,31 +288,25 @@ int snd_dmaengine_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
 		}
 		dma_async_issue_pending(prtd->dma_chan);
 		prtd->startflag = 1;
+		//printk("%s %d\n", __FUNCTION__, __LINE__);
 		break;
 	case SNDRV_PCM_TRIGGER_RESUME:
 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-		#ifdef CONFIG_SND_UBUNTU
-		ret = dmaengine_pcm_prepare_and_submit(substream);
-			if (ret)
-				return ret;
-		dma_async_issue_pending(prtd->dma_chan);
-		prtd->startflag = 1;
-		#else
+		//printk("%s %d\n", __FUNCTION__, __LINE__);
 		dmaengine_resume(prtd->dma_chan);
-		#endif
+		//printk("%s %d\n", __FUNCTION__, __LINE__);
 		break;
 	case SNDRV_PCM_TRIGGER_SUSPEND:
 	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-		#ifdef CONFIG_SND_UBUNTU
-		dmaengine_terminate_all(prtd->dma_chan);
-		prtd->startflag = 0;
-		#else
+		//printk("%s %d\n", __FUNCTION__, __LINE__);
 		dmaengine_pause(prtd->dma_chan);
-		#endif
+		//printk("%s %d\n", __FUNCTION__, __LINE__);
 		break;
 	case SNDRV_PCM_TRIGGER_STOP:
+		//printk("%s %d\n", __FUNCTION__, __LINE__);
 		dmaengine_terminate_all(prtd->dma_chan);
 		prtd->startflag = 0;
+		//printk("%s %d\n", __FUNCTION__, __LINE__);
 		break;
 	default:
 		return -EINVAL;
