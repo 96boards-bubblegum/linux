@@ -635,20 +635,6 @@ const struct snd_kcontrol_new atc2609a_audio_dac_lr_mix[] = {
 			DAC_ANALOG1_DACFMMUTE_SFT, 1, 0),
 };
 
-#ifdef CONFIG_SND_UBUNTU
-static int atc2603c_playback_set_controls(struct snd_soc_codec *codec)
-{
-	snd_soc_update_bits(codec, DAC_ANALOG1, 0x3f << DAC_ANALOG1_VOLUME_SFT, 0x28 << DAC_ANALOG1_VOLUME_SFT);
-	snd_soc_update_bits(codec, DAC_VOLUMECTL0, 0xff << DAC_VOLUMECTL0_DACFL_VOLUME_SFT, 0xb5 << DAC_VOLUMECTL0_DACFL_VOLUME_SFT);
-	snd_soc_update_bits(codec, DAC_VOLUMECTL0, 0xff << DAC_VOLUMECTL0_DACFR_VOLUME_SFT, 0xb5 << DAC_VOLUMECTL0_DACFR_VOLUME_SFT);
-	snd_soc_update_bits(codec, DAC_ANALOG3, 0x1 << DAC_ANALOG3_PAEN_FR_FL_SFT, 0x01 << DAC_ANALOG3_PAEN_FR_FL_SFT);
-	snd_soc_update_bits(codec, DAC_ANALOG3, 0x1 << DAC_ANALOG3_PAOSEN_FR_FL_SFT, 0x01 << DAC_ANALOG3_PAOSEN_FR_FL_SFT);
-	snd_soc_update_bits(codec, DAC_DIGITALCTL, 0x03 << DAC_DIGITALCTL_DEFL_SFT, 0x03 << DAC_DIGITALCTL_DEFL_SFT);
-	snd_soc_update_bits(codec, DAC_ANALOG1, 0x01 << DAC_ANALOG1_PASW_SFT, 0x01 << DAC_ANALOG1_PASW_SFT);
-	snd_soc_update_bits(codec, DAC_ANALOG3, 0x03 << 0, 0x03);
-}
-#endif
-
 static int atc2609a_audio_mic0_event(struct snd_soc_dapm_widget *w,
 	struct snd_kcontrol *kcontrol, int event)
 {
@@ -1076,10 +1062,6 @@ static int atc2609a_audio_hw_params(struct snd_pcm_substream *substream,
 			AUDIOINOUT_CTL, 0x01 << 1, 0x01 << 1);
 		snd_soc_update_bits(codec,
 			DAC_ANALOG3, 0x03, 0x03);
-
-		#ifdef CONFIG_SND_UBUNTU
-		atc2603c_playback_set_controls(codec);
-		#endif
 	} else {
 		//set mute, necessary???? and for 5307???
 		snd_soc_update_bits(codec, ADC_CTL, 0x3 << 5, 0x3 << 5);
@@ -1277,7 +1259,7 @@ static int atc2609a_audio_restore_regs()
 
 static int atc2609a_audio_suspend(struct snd_soc_codec *codec)
 {
-#if CONFIG_SND_UBUNTU
+#if 0
 	atc2609a_audio_power_down(codec);
 	atc2609a_audio_set_bias_level(codec, SND_SOC_BIAS_OFF);
 #endif
